@@ -52,7 +52,7 @@ import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import org.lineageos.internal.util.PackageManagerUtils;
+import com.android.internal.util.stag.StagUtils;
 import org.lineageos.setupwizard.BiometricActivity;
 import org.lineageos.setupwizard.BluetoothSetupActivity;
 import org.lineageos.setupwizard.NetworkSetupActivity;
@@ -185,8 +185,8 @@ public class SetupWizardUtils {
     public static boolean hasGMS(Context context) {
         String gmsSuwPackage = hasLeanback(context) ? GMS_TV_SUW_PACKAGE : GMS_SUW_PACKAGE;
 
-        if (PackageManagerUtils.isAppInstalled(context, GMS_PACKAGE) &&
-                PackageManagerUtils.isAppInstalled(context, gmsSuwPackage)) {
+        if (StagUtils.isAppInstalled(context, GMS_PACKAGE) &&
+                StagUtils.isAppInstalled(context, gmsSuwPackage)) {
             PackageManager packageManager = context.getPackageManager();
             if (LOGV) {
                 Log.v(TAG, GMS_SUW_PACKAGE + " state = " +

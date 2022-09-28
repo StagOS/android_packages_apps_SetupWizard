@@ -20,7 +20,6 @@ import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_2BUTTON_OVE
 import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_3BUTTON_OVERLAY;
 import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_GESTURAL_OVERLAY;
 
-import static org.lineageos.internal.util.DeviceKeysConstants.KEY_MASK_APP_SWITCH;
 import static org.lineageos.setupwizard.SetupWizardApp.DISABLE_NAV_KEYS;
 import static org.lineageos.setupwizard.SetupWizardApp.NAVIGATION_OPTION_KEY;
 
@@ -39,8 +38,6 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.setupcompat.util.WizardManagerHelper;
-
-import lineageos.providers.LineageSettings;
 
 import org.lineageos.setupwizard.util.SetupWizardUtils;
 
@@ -63,10 +60,6 @@ public class NavigationSettingsActivity extends BaseSetupWizardActivity {
         if (mSetupWizardApp.getSettingsBundle().containsKey(DISABLE_NAV_KEYS)) {
             navBarEnabled = mSetupWizardApp.getSettingsBundle().getBoolean(DISABLE_NAV_KEYS);
         }
-
-        int deviceKeys = getResources().getInteger(
-                org.lineageos.platform.internal.R.integer.config_deviceHardwareKeys);
-        boolean hasHomeKey = (deviceKeys & KEY_MASK_APP_SWITCH) != 0;
 
         getGlifLayout().setDescriptionText(getString(R.string.navigation_summary));
         setNextText(R.string.next);
@@ -92,7 +85,7 @@ public class NavigationSettingsActivity extends BaseSetupWizardActivity {
 
         // Hide this page if the device has hardware keys but didn't enable navbar
         // or if there's <= 1 available navigation modes
-        if (!navBarEnabled && hasHomeKey || available <= 1) {
+        if (!navBarEnabled || available <= 1) {
             mSetupWizardApp.getSettingsBundle().putString(NAVIGATION_OPTION_KEY,
                     NAV_BAR_MODE_3BUTTON_OVERLAY);
             Intent intent = WizardManagerHelper.getNextIntent(getIntent(), Activity.RESULT_OK);
@@ -165,10 +158,6 @@ public class NavigationSettingsActivity extends BaseSetupWizardActivity {
     @Override
     protected void onNextPressed() {
         mSetupWizardApp.getSettingsBundle().putString(NAVIGATION_OPTION_KEY, mSelection);
-        boolean hideHint = mHideGesturalHint.isChecked();
-        LineageSettings.System.putIntForUser(getContentResolver(),
-                LineageSettings.System.NAVIGATION_BAR_HINT, hideHint ? 0 : 1,
-                UserHandle.USER_CURRENT);
         Intent intent = WizardManagerHelper.getNextIntent(getIntent(), Activity.RESULT_OK);
         nextAction(NEXT_REQUEST, intent);
     }
