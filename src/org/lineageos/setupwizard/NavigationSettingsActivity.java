@@ -85,7 +85,7 @@ public class NavigationSettingsActivity extends BaseSetupWizardActivity {
 
         // Hide this page if the device has hardware keys but didn't enable navbar
         // or if there's <= 1 available navigation modes
-        if (!navBarEnabled || available <= 1) {
+        if (available <= 1) {
             mSetupWizardApp.getSettingsBundle().putString(NAVIGATION_OPTION_KEY,
                     NAV_BAR_MODE_3BUTTON_OVERLAY);
             Intent intent = WizardManagerHelper.getNextIntent(getIntent(), Activity.RESULT_OK);
